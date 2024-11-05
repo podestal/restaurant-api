@@ -20,13 +20,9 @@ from datetime import timedelta
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-#e8a71@2^3zq^wzdr#vsqssdq2c_=i!5pvobz45)2wx2!jml4f'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = os.environ.get("SECRET_KEY", "changeme")
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -139,3 +135,5 @@ SIMPLE_JWT = {
     'UTH_HEADER_TYPES': ('JWT',),
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
 }
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"

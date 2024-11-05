@@ -14,10 +14,10 @@ DATABASES = {
     }
 }
 
-# INSTALLED_APPS += ["debug_toolbar"]
-# MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
+INSTALLED_APPS += ["debug_toolbar"]
+MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware", "whitenoise.middleware.WhiteNoiseMiddleware"]
 
-# INTERNAL_IPS = ["127.0.0.1"]
+INTERNAL_IPS = ["127.0.0.1"]
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
 CORS_ALLOWED_ORIGINS.extend(
