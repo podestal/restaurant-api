@@ -10,7 +10,7 @@ from . import models
 
 class DishViewSet(ModelViewSet):
 
-    queryset = models.Dish.objects.select_related('category').prefetch_related('image')
+    queryset = models.Dish.objects.select_related('category')
     http_method_names = ['get', 'post', 'patch', 'delete']
     
     def get_permissions(self):

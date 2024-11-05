@@ -5,7 +5,7 @@ class GetDishSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Dish
-        fields = ['id', 'name', 'description', 'cost', 'created_at', 'available', 'picture', 'category', 'image']
+        fields = ['id', 'name', 'description', 'cost', 'created_at', 'available', 'picture', 'category']
 
 class CreateDishSerializer(serializers.ModelSerializer):
 
