@@ -1,7 +1,14 @@
 from rest_framework import serializers
 from . import models
 
+class CategoryNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Category
+        fields = [ 'name']
+
 class GetDishSerializer(serializers.ModelSerializer):
+
+    category = CategoryNameSerializer()
 
     class Meta:
         model = models.Dish
