@@ -14,9 +14,9 @@ class DishViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'patch', 'delete']
     
     def get_permissions(self):
-        if self.request.method in ['GET']:
-            return [permissions.AllowAny()]
-        return [permissions.IsAdminUser()]
+        if self.request.method in ['POST', 'PATCH', 'PUT', 'DELETE']:
+            return [permissions.IsAdminUser()]
+        return [permissions.AllowAny()]
     
     def get_serializer_class(self):
 
@@ -44,8 +44,7 @@ class DishViewSet(ModelViewSet):
     
 class CategoryViewSet(ModelViewSet):
 
-    queryset = models.Category.objects.all()
-    http_method_names = ['get', 'post', 'patch', 'delete']
+    queryset = models.Category.objects.order_by('id')
     
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -53,9 +52,9 @@ class CategoryViewSet(ModelViewSet):
         return serializers.GetCategorySerializer
     
     def get_permissions(self):
-        if self.request.method in ['GET']:
-            return [permissions.AllowAny()]
-        return [permissions.IsAdminUser()]
+        if self.request.method in ['POST', 'PATCH', 'PUT', 'DELETE']:
+            return [permissions.IsAdminUser()]
+        return [permissions.AllowAny()]
 
     # def get_queryset(self):
 
