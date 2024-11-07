@@ -79,6 +79,7 @@ class CartViewSet(ModelViewSet):
 
     # queryset = models.Cart.objects.all()
     serializer_class = serializers.CartSerializer
+    http_method_names = ['get']
 
     def get_queryset(self):
 

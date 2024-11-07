@@ -41,7 +41,7 @@ class Cart(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.session_id
+        return self.session_id or "No Session ID"
     
     def is_expired(self):
         expiry_duration = timedelta(hours=24)

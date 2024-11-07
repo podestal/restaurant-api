@@ -78,23 +78,3 @@ class TestCategory:
     def test_delete_category_authenticated_return_401(self, authenticated_user, create_category):
         response = authenticated_user.delete(f"/api/categories/{create_category.id}/")
         assert response.status_code == status.HTTP_403_FORBIDDEN
-
-    # def test_category_list_filters_by_time_period(self, api_client):
-    #     morning_category = baker.make(Category, time_period=Category.MORNING)
-    #     evening_category = baker.make(Category, time_period=Category.EVENING)
-    #     current_time = timezone.localtime().time()
-
-    #     if time(11, 0) <= current_time < time(18, 0):
-    #         response = api_client.get("/api/categories/")
-    #         assert response.status_code == status.HTTP_200_OK
-    #         assert len(response.data) == 1
-    #         assert response.data[0]["name"] == morning_category.name
-    #     elif time(19, 0) <= current_time < time(23, 30):
-    #         response = api_client.get("/api/categories/")
-    #         assert response.status_code == status.HTTP_200_OK
-    #         assert len(response.data) == 1
-    #         assert response.data[0]["name"] == evening_category.name
-    #     else:
-    #         response = api_client.get("/api/categories/")
-    #         assert response.status_code == status.HTTP_200_OK
-    #         assert len(response.data) == 0
