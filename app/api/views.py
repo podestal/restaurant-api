@@ -2,6 +2,7 @@ from django.utils import timezone
 from datetime import time
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import permissions
+from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 # from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
@@ -73,6 +74,27 @@ class CategoryViewSet(ModelViewSet):
     #         return models.Category.objects.none()
         
     #     return models.Category.objects.all()
+
+class CartViewSet(ModelViewSet):
+
+    # queryset = models.Cart.objects.all()
+    serializer_class = serializers.CartSerializer
+
+    def get_queryset(self):
+
+        session_id = self.request.session.session_key
+        if not session_id:
+            self.request.session.create()
+            session_id = self.request.session.session_key
+
+        models.Cart.objects.get_or_create(session_id=session_id)
+
+        return models.Cart.objects.filter(session_id=session_id)
+    
+class CartItemViewSet(ModelViewSet):
+
+    queryset = models.CartItem.objects.select_related('dish', 'cart')
+    serializer_class = serializers.CartItemSerializer
 
     
 class TableViewSet(ModelViewSet):

@@ -44,6 +44,18 @@ class CreateCategorySerializer(serializers.ModelSerializer):
         model = models.Category
         fields = ['id', 'name', 'description', 'time_period']
 
+class CartSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Cart
+        fields = '__all__'
+
+class CartItemSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.CartItem
+        fields = '__all__'
+
 class GetOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
