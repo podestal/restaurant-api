@@ -1,6 +1,7 @@
 from django.utils import timezone
 from datetime import time
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
 from rest_framework import permissions
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
@@ -12,7 +13,7 @@ from . import models
 class DishViewSet(ModelViewSet):
 
     queryset = models.Dish.objects.select_related('category')
-    http_method_names = ['get', 'post', 'patch', 'delete']
+    # http_method_names = ['get', 'post', 'patch', 'delete']
     
     def get_permissions(self):
         if self.request.method in ['POST', 'PATCH', 'PUT', 'DELETE']:
@@ -77,7 +78,6 @@ class CategoryViewSet(ModelViewSet):
 
 class CartViewSet(ModelViewSet):
 
-    # queryset = models.Cart.objects.all()
     serializer_class = serializers.CartSerializer
     http_method_names = ['get']
 
@@ -90,11 +90,20 @@ class CartViewSet(ModelViewSet):
 
         models.Cart.objects.get_or_create(session_id=session_id)
 
-        return models.Cart.objects.filter(session_id=session_id)
+        return models.Cart.objects.filter(session_id=session_id).prefetch_related('items__dish')
+    
+    @action(detail=False, methods=["get"], url_path='my-cart', permission_classes=[permissions.IsAuthenticated])
+    def get_cart_for_authenticated_user(self, request):
+        user = self.request.user
+        cart, created = models.Cart.objects.get_or_create(user=user)
+        serializer = serializers.CartSerializer(cart)
+        return Response(serializer.data)
+    
+
     
 class CartItemViewSet(ModelViewSet):
 
-    queryset = models.CartItem.objects.select_related('dish', 'cart')
+    queryset = models.CartItem.objects.select_related('dish', 'cart').prefetch_related('dish')
     serializer_class = serializers.CartItemSerializer
 
     

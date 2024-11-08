@@ -1,18 +1,12 @@
 from rest_framework import serializers
 from . import models
 
-# class CategoryNameSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = models.Category
-#         fields = [ 'name']
-
 class GetDishSerializer(serializers.ModelSerializer):
-
-    # category = CategoryNameSerializer()
 
     class Meta:
         model = models.Dish
         fields = ['id', 'name', 'description', 'cost', 'created_at', 'available', 'picture', 'category']
+
 
 class CreateDishSerializer(serializers.ModelSerializer):
 
@@ -44,17 +38,34 @@ class CreateCategorySerializer(serializers.ModelSerializer):
         model = models.Category
         fields = ['id', 'name', 'description', 'time_period']
 
-class CartSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = models.Cart
-        fields = '__all__'
-
 class CartItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.CartItem
-        fields = '__all__'
+        fields = ['id', 'quantity', 'dish', 'price', 'cart']
+
+class SimpleCartItemSerializer(serializers.ModelSerializer):
+
+    name = serializers.SerializerMethodField()
+    picture = serializers.SerializerMethodField()
+
+    class Meta:
+        model = models.CartItem
+        fields = ['id', 'quantity', 'name', 'picture', 'price']
+
+    def get_name(self, obj):
+        return obj.dish.name if obj.dish else None
+
+    def get_picture(self, obj):
+        return obj.dish.picture if obj.dish else None
+
+class CartSerializer(serializers.ModelSerializer):
+
+    items = SimpleCartItemSerializer(many=True)
+
+    class Meta:
+        model = models.Cart
+        fields = ['id', 'session_id', 'created_at', 'updated_at', 'user', 'items']
 
 class GetOrderSerializer(serializers.ModelSerializer):
 
