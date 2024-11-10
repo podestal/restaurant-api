@@ -48,16 +48,20 @@ class SimpleCartItemSerializer(serializers.ModelSerializer):
 
     name = serializers.SerializerMethodField()
     picture = serializers.SerializerMethodField()
+    dish_id = serializers.SerializerMethodField()
 
     class Meta:
         model = models.CartItem
-        fields = ['id', 'quantity', 'name', 'picture', 'price']
+        fields = ['id', 'quantity', 'name', 'picture', 'price', 'dish_id']
 
     def get_name(self, obj):
         return obj.dish.name if obj.dish else None
 
     def get_picture(self, obj):
         return obj.dish.picture if obj.dish else None
+    
+    def get_dish_id(self, obj):
+        return obj.dish.id if obj.dish else None
 
 class CartSerializer(serializers.ModelSerializer):
 

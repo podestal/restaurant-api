@@ -80,22 +80,20 @@ class CartViewSet(ModelViewSet):
 
     serializer_class = serializers.CartSerializer
     http_method_names = ['get']
+    permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        # Check if 'Session-ID' is provided in headers
+
         session_id = self.request.headers.get('Session-ID')
-        
-        # If 'Session-ID' is not in the headers, fall back to creating/retrieving a session
+    
         if not session_id:
             session_id = self.request.session.session_key
             if not session_id:
                 self.request.session.create()
                 session_id = self.request.session.session_key
 
-        # Create or retrieve the cart associated with this session_id
         models.Cart.objects.get_or_create(session_id=session_id)
 
-        # Return the queryset filtered by session_id and prefetch related items
         return models.Cart.objects.filter(session_id=session_id).prefetch_related('items__dish')
     
     @action(detail=False, methods=["get"], url_path='my-cart', permission_classes=[permissions.IsAuthenticated])
