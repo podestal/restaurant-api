@@ -42,7 +42,7 @@ class CartItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.CartItem
-        fields = ['id', 'quantity', 'dish', 'price', 'cart']
+        fields = ['id', 'quantity', 'dish', 'price', 'cart', 'observations']
 
 class SimpleCartItemSerializer(serializers.ModelSerializer):
 
@@ -52,7 +52,7 @@ class SimpleCartItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.CartItem
-        fields = ['id', 'quantity', 'name', 'picture', 'price', 'dish_id']
+        fields = ['id', 'quantity', 'name', 'picture', 'price', 'dish_id', 'observations']
 
     def get_name(self, obj):
         return obj.dish.name if obj.dish else None
