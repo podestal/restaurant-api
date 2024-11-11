@@ -65,11 +65,24 @@ class CartItem(models.Model):
 
 class Table(models.Model):
 
-    number = models.IntegerField(unique=True)
-    is_available = models.BooleanField(default=True)
+    TABLE_VACANT = 'V'
+    TABLE_OCCUPIED = 'O'
+    TABLE_RESERVED = 'R'
+
+    TABLE_STATUS_OPTIONS = [
+        (TABLE_VACANT, 'Vacant'),
+        (TABLE_OCCUPIED, 'Occupied'),
+        (TABLE_RESERVED, 'Reserved'),
+    ]
+
+    number = models.CharField(max_length=5, unique=True)
+    status = models.CharField(max_length=10, choices=TABLE_STATUS_OPTIONS, default=TABLE_VACANT)
+    guest_name = models.CharField(max_length=50, blank=True, null=True)
+    seats = models.IntegerField(default=2)
+
 
     def __str__(self):
-        return f'Mesa {self.number}'
+        return f'Table {self.number}'
     
 class Order(models.Model):
 

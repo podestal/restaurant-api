@@ -91,7 +91,7 @@ class GetTableSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Table
-        fields = ['id', 'number', 'is_available', 'orders', 'bill']
+        fields = ['id', 'number', 'status', 'guest_name', 'seats']
 
     
 
@@ -99,7 +99,7 @@ class CreateTableSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Table
-        fields = ['id', 'number', 'is_available']
+        fields = ['id', 'number', 'status', 'seats']
 
 
 class GetOrderItemSerializer(serializers.ModelSerializer):
