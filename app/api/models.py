@@ -102,16 +102,16 @@ class Order(models.Model):
     status = models.CharField(choices=ORDER_STATUS_OPTIONS, max_length=1)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
-class Bill(models.Model):
+# class Bill(models.Model):
 
-    table = models.OneToOneField(Table, on_delete=models.CASCADE, related_name='bill')
+#     table = models.OneToOneField(Table, on_delete=models.CASCADE, related_name='bill')
     
 
 class OrderItem(models.Model):
 
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True)
     table = models.ForeignKey(Table, on_delete=models.SET_NULL, null=True, blank=True)
-    bill = models.ForeignKey(Bill, on_delete=models.SET_NULL, null=True, blank=True)
+    # bill = models.ForeignKey(Bill, on_delete=models.SET_NULL, null=True, blank=True)
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
     cost = models.DecimalField(max_digits=10, decimal_places=2)
     observations = models.TextField(null=True, blank=True)

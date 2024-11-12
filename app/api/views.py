@@ -152,10 +152,10 @@ class OrderViewSet(ModelViewSet):
 
 class OrderItemViewSet(ModelViewSet):
 
-    queryset = models.OrderItem.objects.select_related('order', 'dish', 'table', 'bill')
+    queryset = models.OrderItem.objects.select_related('order', 'dish', 'table')
     http_method_names = ['get', 'post', 'patch', 'delete']
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['order', 'table', 'bill', 'created_at']
+    filterset_fields = ['order', 'table', 'created_at']
     permission_classes = [permissions.IsAuthenticated]
 
     def get_serializer_class(self):
@@ -163,15 +163,15 @@ class OrderItemViewSet(ModelViewSet):
             return serializers.CreateOrderItemSerializer
         return serializers.GetOrderItemSerializer
 
-class BillViewSet(ModelViewSet):
+# class BillViewSet(ModelViewSet):
 
-    queryset = models.Bill.objects.select_related('table')
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['table']
-    permission_classes = [permissions.IsAuthenticated]
+#     queryset = models.Bill.objects.select_related('table')
+#     filter_backends = [DjangoFilterBackend]
+#     filterset_fields = ['table']
+#     permission_classes = [permissions.IsAuthenticated]
 
-    def get_serializer_class(self):
+#     def get_serializer_class(self):
 
-        if self.request.method == 'POST':
-            return serializers.CreateBillSerializer
-        return serializers.GetBillSerializer
+#         if self.request.method == 'POST':
+#             return serializers.CreateBillSerializer
+#         return serializers.GetBillSerializer
