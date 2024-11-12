@@ -71,11 +71,47 @@ class CartSerializer(serializers.ModelSerializer):
         model = models.Cart
         fields = ['id', 'session_id', 'created_at', 'updated_at', 'user', 'items']
 
+    #     class SimpleCartItemSerializer(serializers.ModelSerializer):
+
+    # name = serializers.SerializerMethodField()
+    # picture = serializers.SerializerMethodField()
+    # dish_id = serializers.SerializerMethodField()
+
+    # class Meta:
+    #     model = models.CartItem
+    #     fields = ['id', 'quantity', 'name', 'picture', 'price', 'dish_id', 'observations']
+
+    # def get_name(self, obj):
+    #     return obj.dish.name if obj.dish else None
+
+    # def get_picture(self, obj):
+    #     return obj.dish.picture if obj.dish else None
+    
+    # def get_dish_id(self, obj):
+    #     return obj.dish.id if obj.dish else None
+
+class SimpleOrderItemSerializer(serializers.ModelSerializer):
+
+    name = serializers.SerializerMethodField()
+    dish_id = serializers.SerializerMethodField()
+
+    class Meta:
+        model = models.OrderItem
+        fields = ['id', 'quantity', 'cost', 'observations', 'name', 'dish_id']
+
+    def get_name(self, obj):
+        return obj.dish.name if obj.dish else None
+    
+    def get_dish_id(self, obj):
+        return obj.dish.id if obj.dish else None
+
 class GetOrderSerializer(serializers.ModelSerializer):
+
+    order_items = SimpleOrderItemSerializer(many=True)
 
     class Meta:
         model = models.Order
-        fields = ['id', 'table', 'created_at', 'updated_at', 'status', 'created_by']
+        fields = ['id', 'table', 'created_at', 'updated_at', 'status', 'created_by', 'order_items']
 
 class CreateOrderSerializer(serializers.ModelSerializer):
 

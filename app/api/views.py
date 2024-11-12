@@ -124,7 +124,7 @@ class TableViewSet(ModelViewSet):
     
 class OrderViewSet(ModelViewSet):
 
-    queryset = models.Order.objects.select_related('table', 'created_by')
+    queryset = models.Order.objects.select_related('table', 'created_by').prefetch_related('order_items__dish')
     http_method_names = ['get', 'post', 'patch', 'delete']
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['table', 'status']
