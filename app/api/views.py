@@ -113,7 +113,7 @@ class CartItemViewSet(ModelViewSet):
     
 class TableViewSet(ModelViewSet):
 
-    queryset = models.Table.objects.prefetch_related('orders', 'bill')
+    queryset = models.Table.objects.prefetch_related('orders')
     http_method_names = ['get', 'post', 'patch', 'delete']
     permission_classes = [permissions.IsAuthenticated]
 
@@ -152,10 +152,10 @@ class OrderViewSet(ModelViewSet):
 
 class OrderItemViewSet(ModelViewSet):
 
-    queryset = models.OrderItem.objects.select_related('order', 'dish', 'table')
+    queryset = models.OrderItem.objects.select_related('order', 'dish')
     http_method_names = ['get', 'post', 'patch', 'delete']
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['order', 'table', 'created_at']
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['order', 'created_at']
     permission_classes = [permissions.IsAuthenticated]
 
     def get_serializer_class(self):
