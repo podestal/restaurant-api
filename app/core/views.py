@@ -1,3 +1,11 @@
-from django.shortcuts import render
+from djoser.views import UserViewSet
+from django.contrib.auth import get_user_model
+from . import serializers
 
-# Create your views here.
+User = get_user_model()
+
+class FilteredUserViewSet(UserViewSet):
+
+    queryset = User.objects.prefetch_related('groups')
+    serializer_class = serializers.UserSerializer
+    http_method_names = ['get', 'post']
