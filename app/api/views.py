@@ -3,7 +3,9 @@ from datetime import time
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework import permissions
+from .permissions import IsAdminOrWaiter
 from rest_framework.response import Response
+from rest_framework.permissions import DjangoModelPermissions
 from django_filters.rest_framework import DjangoFilterBackend
 # from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
@@ -81,7 +83,7 @@ class TableViewSet(ModelViewSet):
 
     queryset = models.Table.objects.prefetch_related('orders')
     http_method_names = ['get', 'post', 'patch', 'delete']
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [DjangoModelPermissions]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -91,10 +93,9 @@ class TableViewSet(ModelViewSet):
 class OrderViewSet(ModelViewSet):
 
     queryset = models.Order.objects.select_related('table', 'created_by').prefetch_related('order_items__dish')
-    http_method_names = ['get', 'post', 'patch', 'delete']
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['table', 'status']
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsAdminOrWaiter]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -108,7 +109,7 @@ class OrderItemViewSet(ModelViewSet):
 
     queryset = models.OrderItem.objects.select_related('order', 'dish')
     http_method_names = ['get', 'post', 'patch', 'delete']
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [DjangoModelPermissions]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
