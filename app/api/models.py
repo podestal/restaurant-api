@@ -99,7 +99,7 @@ class Order(models.Model):
     table = models.ForeignKey(Table, on_delete=models.CASCADE, related_name='orders', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    status = models.CharField(choices=ORDER_STATUS_OPTIONS, max_length=1)
+    status = models.CharField(choices=ORDER_STATUS_OPTIONS, max_length=1, default='P')
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     
 

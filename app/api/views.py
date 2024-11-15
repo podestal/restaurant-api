@@ -109,7 +109,7 @@ class OrderItemViewSet(ModelViewSet):
 
     queryset = models.OrderItem.objects.select_related('order', 'dish')
     http_method_names = ['get', 'post', 'patch', 'delete']
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [IsAdminOrWaiter]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
