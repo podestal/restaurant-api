@@ -90,9 +90,19 @@ class TableViewSet(ModelViewSet):
             return serializers.CreateTableSerializer    
         return serializers.GetTableSerializer
     
+class BillViewSet(ModelViewSet):
+
+    queryset = models.Bill.objects.select_related('table').prefetch_related('order_items__dish')
+
+    def get_serializer_class(self):
+
+        if self.request.method == 'POST':
+            return serializers.CreateBillSerializer
+        return serializers.GetBillSerializer
+    
 class OrderViewSet(ModelViewSet):
 
-    queryset = models.Order.objects.select_related('table', 'created_by').prefetch_related('order_items__dish')
+    queryset = models.Order.objects.select_related('table', 'created_by').prefetch_related('order_items__dish').order_by('-id')
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['table', 'status']
     permission_classes = [IsAdminOrWaiter]
@@ -100,6 +110,8 @@ class OrderViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return serializers.CreateOrderSerializer
+        if self.request.method in ['PUT', 'PATCH']:
+            return serializers.UpdateOrderSerializer
         return serializers.GetOrderSerializer
     
     def get_serializer_context(self):

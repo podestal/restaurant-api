@@ -84,6 +84,10 @@ class Table(models.Model):
     def __str__(self):
         return f'Table {self.number}'
     
+class Bill(models.Model):
+
+    table = models.OneToOneField(Table, on_delete=models.CASCADE, related_name='bill')
+    
 class Order(models.Model):
 
     PENDING_DISH = 'P'
@@ -106,6 +110,7 @@ class Order(models.Model):
 class OrderItem(models.Model):
 
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True, related_name='order_items')
+    bill = models.ForeignKey(Bill, on_delete=models.SET_NULL, null=True, blank=True, related_name='order_items')
     dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
     cost = models.DecimalField(max_digits=10, decimal_places=2)
     observations = models.TextField(null=True, blank=True)

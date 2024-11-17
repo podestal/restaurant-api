@@ -113,6 +113,26 @@ class GetOrderSerializer(serializers.ModelSerializer):
         model = models.Order
         fields = ['id', 'table', 'created_at', 'updated_at', 'status', 'created_by', 'order_items']
 
+class GetBillSerializer(serializers.ModelSerializer):
+
+    order_items = SimpleOrderItemSerializer(many=True)
+
+    class Meta:
+        model = models.Bill
+        fields = ['id', 'table', 'order_items']
+
+class CreateBillSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Bill
+        fields = ['id', 'table']
+
+class UpdateOrderSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Order
+        fields = ['id', 'table', 'created_by', 'status']
+
 class CreateOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
