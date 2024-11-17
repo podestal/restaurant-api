@@ -107,9 +107,9 @@ class OrderViewSet(ModelViewSet):
 
 class OrderItemViewSet(ModelViewSet):
 
-    queryset = models.OrderItem.objects.select_related('order', 'dish')
-    http_method_names = ['get', 'post', 'patch', 'delete']
+    queryset = models.OrderItem.objects.select_related('order', 'dish').prefetch_related('order__table', 'dish__category')
     permission_classes = [IsAdminOrWaiter]
+    http_method_names = ['post', 'patch', 'delete']
 
     def get_serializer_class(self):
         if self.request.method == 'POST':

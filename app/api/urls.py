@@ -13,11 +13,9 @@ cart_router.register('cart-items', views.CartItemViewSet, basename='cart-items')
 
 router.register('tables', views.TableViewSet)
 router.register('orders', views.OrderViewSet)
+router.register('order-items', views.OrderItemViewSet)
 
-order_router = routers.NestedDefaultRouter(router, 'orders', lookup='orders')
-order_router.register('order-items', views.OrderItemViewSet, basename='order-items')
+# order_router = routers.NestedDefaultRouter(router, 'orders', lookup='orders')
+# order_router.register('order-items', views.OrderItemViewSet, basename='order-items')
 
-# router.register('order-items', views.OrderItemViewSet)
-# router.register('bills', views.BillViewSet)
-
-urlpatterns = router.urls + cart_router.urls + order_router.urls
+urlpatterns = router.urls + cart_router.urls
