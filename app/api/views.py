@@ -95,6 +95,9 @@ class BillViewSet(ModelViewSet):
     queryset = models.Bill.objects.select_related('table').prefetch_related('order_items__dish')
     permission_classes = [IsAdminOrWaiter]
 
+    def get_serializer_context(self):
+        return {'table_id': self.kwargs.get('tables_pk')}
+
     def get_serializer_class(self):
 
         if self.request.method == 'POST':   

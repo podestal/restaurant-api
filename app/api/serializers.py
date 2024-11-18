@@ -125,7 +125,11 @@ class CreateBillSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Bill
-        fields = ['id', 'table']
+        fields = ['id']
+
+    def create(self, validated_data):
+        table_id = self.context['table_id']
+        return models.Bill.objects.create(table_id=table_id, **validated_data)
 
 class UpdateOrderSerializer(serializers.ModelSerializer):
 
