@@ -93,11 +93,11 @@ class CartSerializer(serializers.ModelSerializer):
 class SimpleOrderItemSerializer(serializers.ModelSerializer):
 
     name = serializers.SerializerMethodField()
-    dish_id = serializers.SerializerMethodField()
+    # dish_id = serializers.SerializerMethodField()
 
     class Meta:
         model = models.OrderItem
-        fields = ['id', 'quantity', 'cost', 'observations', 'name', 'dish_id']
+        fields = ['id', 'quantity', 'cost', 'observations', 'name']
 
     def get_name(self, obj):
         return obj.dish.name if obj.dish else None
@@ -119,7 +119,7 @@ class GetBillSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Bill
-        fields = ['id', 'order_items']
+        fields = ['id', 'order_items', 'table']
 
 class CreateBillSerializer(serializers.ModelSerializer):
 
@@ -172,4 +172,4 @@ class CreateOrderItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.OrderItem
-        fields = ['id', 'dish', 'order', 'quantity', 'observations', 'cost']
+        fields = ['id', 'dish', 'order', 'quantity', 'observations', 'cost', 'bill']
