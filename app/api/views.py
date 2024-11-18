@@ -93,12 +93,17 @@ class TableViewSet(ModelViewSet):
 class BillViewSet(ModelViewSet):
 
     queryset = models.Bill.objects.select_related('table').prefetch_related('order_items__dish')
+    permission_classes = [IsAdminOrWaiter]
 
     def get_serializer_class(self):
 
-        if self.request.method == 'POST':
+        if self.request.method == 'POST':   
             return serializers.CreateBillSerializer
         return serializers.GetBillSerializer
+    
+    def get_queryset(self):
+        table_id = self.kwargs.get('tables_pk')
+        return self.queryset.filter(table_id=table_id)
     
 class OrderViewSet(ModelViewSet):
 
