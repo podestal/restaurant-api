@@ -81,7 +81,7 @@ class CartItemViewSet(ModelViewSet):
     
 class TableViewSet(ModelViewSet):
 
-    queryset = models.Table.objects.prefetch_related('orders')
+    queryset = models.Table.objects.prefetch_related('orders').order_by('id')
     http_method_names = ['get', 'post', 'patch', 'delete']
     permission_classes = [DjangoModelPermissions]
 

@@ -87,6 +87,21 @@ class Table(models.Model):
 class Bill(models.Model):
 
     table = models.OneToOneField(Table, on_delete=models.CASCADE, related_name='bill')
+
+
+    def save(self, *args, **kwargs):
+        """Create or update a bill, updating table status"""
+        self.table.status = Table.TABLE_OCCUPIED
+        self.table.save()
+        super().save(*args, **kwargs)
+
+
+    def delete(self, *args, **kwargs):
+        """Delete the bill, updating table status"""
+        self.table.status = Table.TABLE_VACANT
+        self.table.save()
+        super().save(*args, **kwargs)
+
     
 class Order(models.Model):
 

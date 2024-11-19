@@ -108,10 +108,14 @@ class SimpleOrderItemSerializer(serializers.ModelSerializer):
 class GetOrderSerializer(serializers.ModelSerializer):
 
     order_items = SimpleOrderItemSerializer(many=True)
+    waiter = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Order
-        fields = ['id', 'table', 'created_at', 'updated_at', 'status', 'created_by', 'order_items']
+        fields = ['id', 'status', 'order_items', 'waiter']
+
+    def get_waiter(self, obj):
+        return f'{obj.created_by.first_name} {obj.created_by.last_name[0]}' if obj.created_by else None
 
 class GetBillSerializer(serializers.ModelSerializer):
 
