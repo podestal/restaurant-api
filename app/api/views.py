@@ -1,5 +1,5 @@
 from django.utils import timezone
-from datetime import time
+from datetime import datetime, time
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework import permissions
@@ -129,9 +129,31 @@ class OrderItemViewSet(ModelViewSet):
 
     queryset = models.OrderItem.objects.select_related('order', 'dish').prefetch_related('order__table', 'dish__category')
     permission_classes = [IsAdminOrWaiter]
-    http_method_names = ['post', 'patch', 'delete']
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['created_at']
+    http_method_names = ['get', 'post', 'patch', 'delete']
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return serializers.CreateOrderItemSerializer
         return serializers.GetOrderItemSerializer
+    
+    @action(detail=False, methods=['get'])
+    def by_month(self, request):
+        """
+        Get OrderItems filtered by the specified month and year.
+        """
+
+        month = request.query_params.get('month')
+        year = request.query_params.get('year')
+
+        # month = int(month)
+        # year = int(year)
+
+        today = datetime.today()
+        month = today.month
+        year = today.year
+
+        order_items = self.queryset.filter(created_at__year=year, created_at__month=month)
+        serializer = serializers.GetOrderItemSerializer(order_items, many=True)
+        return Response(serializer.data)
