@@ -143,17 +143,18 @@ class OrderItemViewSet(ModelViewSet):
         """
         Get OrderItems filtered by the specified month and year.
         """
-
+        day = request.query_params.get('day')
         month = request.query_params.get('month')
         year = request.query_params.get('year')
 
-        # month = int(month)
-        # year = int(year)
-
-        today = datetime.today()
-        month = today.month
-        year = today.year
+        if not month or not year:
+            today = datetime.today()
+            month = today.month
+            year = today.year
+        else:
+            month = int(month)
+            year = int(year)
 
         order_items = self.queryset.filter(created_at__year=year, created_at__month=month)
-        serializer = serializers.GetOrderItemSerializer(order_items, many=True)
+        serializer = serializers.SimpleOrderItemSerializer(order_items, many=True)
         return Response(serializer.data)

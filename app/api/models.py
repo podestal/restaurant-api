@@ -100,7 +100,7 @@ class Bill(models.Model):
         """Delete the bill, updating table status"""
         self.table.status = Table.TABLE_VACANT
         self.table.save()
-        super().save(*args, **kwargs)
+        super().delete(*args, **kwargs)
 
     
 class Order(models.Model):
