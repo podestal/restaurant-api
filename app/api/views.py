@@ -143,7 +143,7 @@ class OrderItemViewSet(ModelViewSet):
         """
         Get OrderItems filtered by the specified month and year.
         """
-        day = request.query_params.get('day')
+
         month = request.query_params.get('month')
         year = request.query_params.get('year')
 
@@ -152,6 +152,7 @@ class OrderItemViewSet(ModelViewSet):
             month = today.month
             year = today.year
         else:
+            
             month = int(month)
             year = int(year)
 

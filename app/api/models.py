@@ -16,7 +16,7 @@ class Category(models.Model):
 
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
-    time_period = models.CharField(max_length=1, choices=TIME_PERIODS)
+    time_period = models.CharField(max_length=1, choices=TIME_PERIODS, default=BOTH)
 
     def __str__(self):
         return self.name

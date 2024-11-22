@@ -36,7 +36,7 @@ class CreateCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Category
-        fields = ['id', 'name', 'description', 'time_period']
+        fields = ['id', 'name', 'description']
 
 class CartItemSerializer(serializers.ModelSerializer):
 
@@ -97,7 +97,7 @@ class SimpleOrderItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.OrderItem
-        fields = ['id', 'quantity', 'cost', 'observations', 'name']
+        fields = ['id', 'quantity', 'cost', 'observations', 'name', 'created_at']
 
     def get_name(self, obj):
         return obj.dish.name if obj.dish else None
