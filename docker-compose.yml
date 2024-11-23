@@ -8,8 +8,8 @@ services:
       - 8000:8000
     command: >+
       sh -c "python manage.py wait_for_db &&
-             python manage.py migrate &&
-             gunicorn restaurant.wsgi:application --bind 0.0.0.0:8000 --timeout=5 --threads=10"
+            python manage.py migrate &&
+            daphne -b 0.0.0.0 -p 8000 restaurant.asgi:application"
             
     environment:
       - DB_HOST=db
@@ -53,6 +53,12 @@ services:
               cp /etc/nginx/conf.d/nginx-dev.conf /etc/nginx/nginx.conf;
              fi &&
              nginx -g "daemon off;"'
+
+  redis:
+    image: redis:6-alpine
+    restart: always
+    ports:
+      - 6379:6379
 
 volumes:
   dev-db-data:

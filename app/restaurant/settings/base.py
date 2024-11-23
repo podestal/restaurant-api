@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'rest_framework',
+    'channels',
     'core',
     'api',
 ]
@@ -72,7 +73,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'restaurant.wsgi.application'
+# WSGI_APPLICATION = 'restaurant.wsgi.application'
+ASGI_APPLICATION = 'restaurant.asgi.application'
 
 
 # Database
@@ -150,3 +152,12 @@ SIMPLE_JWT = {
 }
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}

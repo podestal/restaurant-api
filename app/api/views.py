@@ -7,8 +7,10 @@ from .permissions import IsAdminOrWaiter
 from rest_framework.response import Response
 from rest_framework.permissions import DjangoModelPermissions
 from django_filters.rest_framework import DjangoFilterBackend
-# from channels.layers import get_channel_layer
+
+from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+
 from . import serializers
 from . import models
 
@@ -114,6 +116,26 @@ class OrderViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['table', 'status']
     permission_classes = [IsAdminOrWaiter]
+
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+
+        # Broadcast status change if status is "Served"
+        order = self.get_object()
+        if order.status == 'S':  # "Served"
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                "order_status_updates",
+                {
+                    "type": "send_order_status_update",
+                    "message": {
+                        "order_id": order.id,
+                        "status": order.status,
+                        "table": order.table.id,
+                    },
+                },
+            )
+        return response
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
