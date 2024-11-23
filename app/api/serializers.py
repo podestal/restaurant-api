@@ -3,9 +3,17 @@ from . import models
 
 class GetDishSerializer(serializers.ModelSerializer):
 
+    picture_url = serializers.SerializerMethodField()
+
     class Meta:
         model = models.Dish
-        fields = ['id', 'name', 'description', 'cost', 'created_at', 'available', 'picture', 'category']
+        fields = ['id', 'name', 'description', 'cost', 'created_at', 'available', 'picture_url', 'category']
+
+    def get_picture_url(self, obj):
+        request = self.context.get('request')
+        if obj.picture:
+            return request.build_absolute_uri(obj.picture.url)
+        return None
 
 
 class CreateDishSerializer(serializers.ModelSerializer):
