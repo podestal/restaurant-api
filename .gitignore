@@ -8,3 +8,4 @@ schema.yml
 .vscode
 htmlcov
 staticfiles
+mediafiles

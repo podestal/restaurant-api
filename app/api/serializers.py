@@ -60,13 +60,21 @@ class SimpleCartItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.CartItem
-        fields = ['id', 'quantity', 'name', 'picture', 'price', 'dish_id', 'observations']
+        fields = ['id', 'quantity', 'name', 'price', 'dish_id', 'picture', 'observations']
 
     def get_name(self, obj):
         return obj.dish.name if obj.dish else None
 
+        # request = self.context.get('request')
+        # if obj.picture:
+        #     return request.build_absolute_uri(obj.picture.url)
+        # return None
+
     def get_picture(self, obj):
-        return obj.dish.picture if obj.dish else None
+        request = self.context.get('request')
+        if obj.dish.picture:
+            return request.build_absolute_uri(obj.dish.picture.url)
+        return None
     
     def get_dish_id(self, obj):
         return obj.dish.id if obj.dish else None
