@@ -115,10 +115,21 @@ class Order(models.Model):
         (COMPLETED_DISH, 'Completed')
     ]
 
+    DINE_IN_TYPE = 'I'
+    DELIVERY_TYPE = 'D'
+    TAKE_OUT_TYPE = 'T'
+
+    ORDER_TYPE_OPTIONS = [
+        (DINE_IN_TYPE, 'Dine in'),
+        (DELIVERY_TYPE, 'Delivery'),
+        (TAKE_OUT_TYPE, 'Take out'),
+    ]
+
     table = models.ForeignKey(Table, on_delete=models.CASCADE, related_name='orders', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    status = models.CharField(choices=ORDER_STATUS_OPTIONS, max_length=1, default='P')
+    status = models.CharField(choices=ORDER_STATUS_OPTIONS, max_length=1, default=PENDING_DISH)
+    order_type = models.CharField(choices=ORDER_TYPE_OPTIONS, max_length=1, default=DINE_IN_TYPE)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     
 

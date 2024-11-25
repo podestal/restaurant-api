@@ -128,7 +128,7 @@ class GetOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Order
-        fields = ['id', 'status', 'order_items', 'waiter', 'updated_at']
+        fields = ['id', 'status', 'order_items', 'waiter', 'updated_at', 'order_type']
 
     def get_waiter(self, obj):
         return f'{obj.created_by.first_name} {obj.created_by.last_name[0]}' if obj.created_by else None
@@ -155,13 +155,13 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Order
-        fields = ['id', 'table', 'created_by', 'status']
+        fields = ['id', 'table', 'created_by', 'status', 'order_type']
 
 class CreateOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Order
-        fields = ['id', 'table', 'status']
+        fields = ['id', 'table', 'status', 'order_type']
 
     def create(self, validated_data):
         user = self.context['user_id']

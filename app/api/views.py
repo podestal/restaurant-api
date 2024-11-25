@@ -17,6 +17,7 @@ from . import models
 class DishViewSet(ModelViewSet):
 
     queryset = models.Dish.objects.select_related('category')
+    http_method_names = ['get', 'post', 'patch', 'delete']
     
     def get_permissions(self):
         if self.request.method in ['POST', 'PATCH', 'PUT', 'DELETE']:
@@ -120,9 +121,8 @@ class OrderViewSet(ModelViewSet):
     def update(self, request, *args, **kwargs):
         response = super().update(request, *args, **kwargs)
 
-        # Broadcast status change if status is "Served"
         order = self.get_object()
-        if order.status == 'S':  # "Served"
+        if order.status == 'S' or order.status == 'C': 
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.group_send)(
                 "order_status_updates",
