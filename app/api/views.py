@@ -142,7 +142,7 @@ class OrderViewSet(ModelViewSet):
             **kwargs)
         
         if cart_id:
-            
+
             cart = models.Cart.objects.prefetch_related('items').get(id=cart_id)
             for item in cart.items.all():
                 models.OrderItem.objects.create(
@@ -153,23 +153,20 @@ class OrderViewSet(ModelViewSet):
                     observations=item.observations,
                 )
 
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                "order_status_updates",
+                {
+                    "type": "send_order_status_update",
+                    "message": {
+                        "order_id": order.id,
+                    },
+                },
+            )
+
             cart.items.all().delete()
 
         return Response(serializers.CreateOrderSerializer(order).data)
-        
-
-
-    # table = models.ForeignKey(Table, on_delete=models.CASCADE, related_name='orders', null=True)
-    # created_at = models.DateTimeField(auto_now_add=True)
-    # updated_at = models.DateTimeField(auto_now=True)
-    # status = models.CharField(choices=ORDER_STATUS_OPTIONS, max_length=1, default=PENDING_DISH)
-    # order_type = models.CharField(choices=ORDER_TYPE_OPTIONS, max_length=1, default=DINE_IN_TYPE)
-    # created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    
-        
-        
-
-        # return super().create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
         response = super().update(request, *args, **kwargs)
