@@ -118,11 +118,31 @@ class OrderViewSet(ModelViewSet):
     filterset_fields = ['table', 'status']
     permission_classes = [IsAdminOrWaiter]
 
+    # def create(self, request, *args, **kwargs):
+
+    #     cart_id = request.query_params.get('cart')
+    #     order_type = request.data.get('order_type')
+    #     table = request.data.get('table')
+        
+
+
+    # table = models.ForeignKey(Table, on_delete=models.CASCADE, related_name='orders', null=True)
+    # created_at = models.DateTimeField(auto_now_add=True)
+    # updated_at = models.DateTimeField(auto_now=True)
+    # status = models.CharField(choices=ORDER_STATUS_OPTIONS, max_length=1, default=PENDING_DISH)
+    # order_type = models.CharField(choices=ORDER_TYPE_OPTIONS, max_length=1, default=DINE_IN_TYPE)
+    # created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    
+        
+        
+
+        # return super().create(request, *args, **kwargs)
+
     def update(self, request, *args, **kwargs):
         response = super().update(request, *args, **kwargs)
 
         order = self.get_object()
-        if order.status == 'S' or order.status == 'C': 
+        if order.status in ['S', 'C']: 
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.group_send)(
                 "order_status_updates",
