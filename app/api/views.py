@@ -2,6 +2,7 @@ from django.utils import timezone
 from datetime import datetime, time
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
+from rest_framework import status
 from rest_framework import permissions
 from .permissions import IsAdminOrWaiter
 from rest_framework.response import Response
@@ -118,11 +119,30 @@ class OrderViewSet(ModelViewSet):
     filterset_fields = ['table', 'status']
     permission_classes = [IsAdminOrWaiter]
 
-    # def create(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
 
-    #     cart_id = request.query_params.get('cart')
-    #     order_type = request.data.get('order_type')
-    #     table = request.data.get('table')
+        cart_id = request.query_params.get('cart')
+        # table = models.Table.objects.get(id=request.data.get('table'))
+        table= request.data.get('table')
+        created_by = request.data.get('created_by')
+        customer_name = request.data.get('customer_name')
+        customer_phone = request.data.get('customer_phone')
+        customer_address = request.data.get('customer_address')
+        status = request.data.get('status')
+        order_type = request.data.get('order_type')
+
+        order = models.Order.objects.create(
+            table_id=table, 
+            created_by_id=created_by, 
+            status=status,
+            order_type=order_type,
+            customer_name=customer_name,
+            customer_phone=customer_phone,
+            customer_address=customer_address,
+            *args,
+            **kwargs)
+
+        return Response(serializers.CreateOrderSerializer(order).data)
         
 
 
