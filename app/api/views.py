@@ -122,7 +122,6 @@ class OrderViewSet(ModelViewSet):
     def create(self, request, *args, **kwargs):
 
         cart_id = request.query_params.get('cart')
-        # table = models.Table.objects.get(id=request.data.get('table'))
         table= request.data.get('table')
         created_by = request.data.get('created_by')
         customer_name = request.data.get('customer_name')
@@ -141,6 +140,20 @@ class OrderViewSet(ModelViewSet):
             customer_address=customer_address,
             *args,
             **kwargs)
+        
+        if cart_id:
+            
+            cart = models.Cart.objects.prefetch_related('items').get(id=cart_id)
+            for item in cart.items.all():
+                models.OrderItem.objects.create(
+                    order=order,
+                    dish=item.dish,
+                    cost=item.price,
+                    quantity=item.quantity,
+                    observations=item.observations,
+                )
+
+            cart.items.all().delete()
 
         return Response(serializers.CreateOrderSerializer(order).data)
         
