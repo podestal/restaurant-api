@@ -181,7 +181,6 @@ class OrderViewSet(ModelViewSet):
                     "message": {
                         "order_id": order.id,
                         "status": order.status,
-                        "table": order.table.id,
                     },
                 },
             )
