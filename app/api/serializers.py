@@ -128,7 +128,7 @@ class GetOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Order
-        fields = ['id', 'status', 'order_items', 'waiter', 'updated_at', 'order_type']
+        fields = ['id', 'status', 'order_items', 'waiter', 'updated_at', 'order_type', 'customer_name', 'customer_phone', 'customer_address']
 
     def get_waiter(self, obj):
         return f'{obj.created_by.first_name} {obj.created_by.last_name[0]}' if obj.created_by else None
@@ -165,7 +165,9 @@ class CreateOrderSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = self.context['user_id']
-        return models.Order.objects.create(created_by=user, **validated_data)
+        if user:
+            return models.Order.objects.create(created_by=user, **validated_data)
+        return models.Order.objects.create(**validated_data)
 
 class GetTableSerializer(serializers.ModelSerializer):
 

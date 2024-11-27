@@ -117,7 +117,7 @@ class OrderViewSet(ModelViewSet):
     queryset = models.Order.objects.select_related('table', 'created_by').prefetch_related('order_items__dish').order_by('-id')
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['table', 'status']
-    permission_classes = [IsAdminOrWaiter]
+    permission_classes = [permissions.AllowAny]
 
     def create(self, request, *args, **kwargs):
 
