@@ -8,8 +8,8 @@ class UserSerializer(BasedUserSerializer):
     )
 
     class Meta(BasedUserSerializer.Meta):
-        fields = ["id", "first_name", "last_name", "username", "email", 'groups']
+        fields = ["id", "first_name", "last_name", "phone", "email", 'groups']
 
 class CreateUserSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
-        fields = ["id", "username", "password", "email", "first_name", "last_name"]
+        fields = ["id", "password", "email", "first_name", "last_name", "phone"]
