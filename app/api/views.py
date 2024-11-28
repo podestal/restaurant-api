@@ -79,7 +79,7 @@ class CartViewSet(ModelViewSet):
     
 class CartItemViewSet(ModelViewSet):
 
-    queryset = models.CartItem.objects.select_related('dish', 'cart').prefetch_related('dish')
+    queryset = models.CartItem.objects.select_related('dish', 'cart').prefetch_related('dish').order_by('id')
     serializer_class = serializers.CartItemSerializer
 
     
