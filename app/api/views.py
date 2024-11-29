@@ -9,8 +9,12 @@ from rest_framework.response import Response
 from rest_framework.permissions import DjangoModelPermissions
 from django_filters.rest_framework import DjangoFilterBackend
 
+from django.core.mail import send_mail
+
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+
+from .utils import send_order_status_email
 
 from . import serializers
 from . import models
@@ -172,6 +176,12 @@ class OrderViewSet(ModelViewSet):
         response = super().update(request, *args, **kwargs)
 
         order = self.get_object()
+
+        email = request.query_params.get('email')
+
+        if email and order.status == 'C':
+            send_order_status_email(email, order)
+
         if order.status in ['S', 'C']: 
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.group_send)(
