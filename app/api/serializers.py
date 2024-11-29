@@ -109,7 +109,7 @@ class GetOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Order
-        fields = ['id', 'status', 'order_items', 'waiter', 'updated_at', 'order_type', 'customer_name', 'customer_phone', 'customer_address']
+        fields = ['id', 'status', 'order_items', 'waiter', 'updated_at', 'order_type', 'customer_name', 'customer_phone', 'customer_email', 'customer_address']
 
     def get_waiter(self, obj):
         return f'{obj.created_by.first_name} {obj.created_by.last_name[0]}' if obj.created_by else None

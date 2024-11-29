@@ -131,6 +131,7 @@ class OrderViewSet(ModelViewSet):
         customer_name = request.data.get('customer_name')
         customer_phone = request.data.get('customer_phone')
         customer_address = request.data.get('customer_address')
+        customer_email = request.data.get('customer_email')
         status = request.data.get('status')
         order_type = request.data.get('order_type')
 
@@ -142,6 +143,7 @@ class OrderViewSet(ModelViewSet):
             customer_name=customer_name,
             customer_phone=customer_phone,
             customer_address=customer_address,
+            customer_email=customer_email,
             *args,
             **kwargs)
         

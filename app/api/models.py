@@ -132,6 +132,7 @@ class Order(models.Model):
     order_type = models.CharField(choices=ORDER_TYPE_OPTIONS, max_length=1, default=DINE_IN_TYPE)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     customer_name = models.CharField(max_length=255, null=True, blank=True)
+    customer_email = models.CharField(max_length=255, null=True, blank=True)
     customer_phone = models.CharField(max_length=15, null=True, blank=True)
     customer_address = models.TextField(null=True, blank=True) 
     
