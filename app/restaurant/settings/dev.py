@@ -34,11 +34,3 @@ CSRF_TRUSTED_ORIGINS = []
 CSRF_TRUSTED_ORIGINS.extend(
     filter(None, os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(","))
 )
-
-# Email settings for Zoho Mail
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.zoho.com'
-EMAIL_PORT = 587  # Use 465 for SSL
-EMAIL_USE_TLS = True  # Set False if using SSL, and use EMAIL_USE_SSL = True
-EMAIL_HOST_USER = 'l.r.p.2991@gmail.com' # Example: 'your-email@yourdomain.com'
-EMAIL_HOST_PASSWORD = '13anguloX'
