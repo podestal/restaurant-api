@@ -49,6 +49,7 @@ service-identity==24.2.0
 social-auth-app-django==5.4.2
 social-auth-core==4.5.4
 sqlparse==0.5.1
+stripe==11.3.0
 tomli==2.0.2
 twisted==24.10.0
 txaio==23.1.1

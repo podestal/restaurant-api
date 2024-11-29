@@ -9,8 +9,6 @@ from rest_framework.response import Response
 from rest_framework.permissions import DjangoModelPermissions
 from django_filters.rest_framework import DjangoFilterBackend
 
-from django.core.mail import send_mail
-
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
@@ -18,6 +16,8 @@ from .utils import send_order_status_email
 
 from . import serializers
 from . import models
+
+import stripe
 
 class DishViewSet(ModelViewSet):
 
@@ -135,6 +135,10 @@ class OrderViewSet(ModelViewSet):
         status = request.data.get('status')
         order_type = request.data.get('order_type')
 
+        payment_intent_id = request.data.get('payment_intent_id')
+
+
+
         order = models.Order.objects.create(
             table_id=table, 
             created_by_id=created_by, 
@@ -148,6 +152,13 @@ class OrderViewSet(ModelViewSet):
             **kwargs)
         
         if cart_id:
+
+            try:
+                payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+                if payment_intent.status != "succeeded":
+                    return Response({"error": "Payment not verified"}, status=status.HTTP_400_BAD_REQUEST)
+            except stripe.error.StripeError as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
             cart = models.Cart.objects.prefetch_related('items').get(id=cart_id)
             for item in cart.items.all():
