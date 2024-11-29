@@ -36,9 +36,14 @@ class UpdateDishSerializer(serializers.ModelSerializer):
 
 class GetCategorySerializer(serializers.ModelSerializer):
 
+    available = serializers.SerializerMethodField()
     class Meta:
         model = models.Category
-        fields = ['id', 'name', 'description', 'time_period']
+        fields = ['id', 'name', 'description', 'time_period', 'available']
+
+    def get_available(self, obj):
+        dish_count = models.Dish.objects.select_related('category').filter(category=obj, available=True).count()
+        return dish_count > 0
 
 class CreateCategorySerializer(serializers.ModelSerializer):
 
@@ -65,11 +70,6 @@ class SimpleCartItemSerializer(serializers.ModelSerializer):
     def get_name(self, obj):
         return obj.dish.name if obj.dish else None
 
-        # request = self.context.get('request')
-        # if obj.picture:
-        #     return request.build_absolute_uri(obj.picture.url)
-        # return None
-
     def get_picture(self, obj):
         request = self.context.get('request')
         if obj.dish.picture:
@@ -86,25 +86,6 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Cart
         fields = ['id', 'session_id', 'created_at', 'updated_at', 'user', 'items']
-
-    #     class SimpleCartItemSerializer(serializers.ModelSerializer):
-
-    # name = serializers.SerializerMethodField()
-    # picture = serializers.SerializerMethodField()
-    # dish_id = serializers.SerializerMethodField()
-
-    # class Meta:
-    #     model = models.CartItem
-    #     fields = ['id', 'quantity', 'name', 'picture', 'price', 'dish_id', 'observations']
-
-    # def get_name(self, obj):
-    #     return obj.dish.name if obj.dish else None
-
-    # def get_picture(self, obj):
-    #     return obj.dish.picture if obj.dish else None
-    
-    # def get_dish_id(self, obj):
-    #     return obj.dish.id if obj.dish else None
 
 class SimpleOrderItemSerializer(serializers.ModelSerializer):
 
