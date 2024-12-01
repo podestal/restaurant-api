@@ -21,7 +21,7 @@ import stripe
 
 class DishViewSet(ModelViewSet):
 
-    queryset = models.Dish.objects.select_related('category')
+    queryset = models.Dish.objects.select_related('category').order_by('id')
     http_method_names = ['get', 'post', 'patch', 'delete']
     
     def get_permissions(self):
@@ -221,7 +221,7 @@ class OrderViewSet(ModelViewSet):
 
 class OrderItemViewSet(ModelViewSet):
 
-    queryset = models.OrderItem.objects.select_related('order', 'dish').prefetch_related('order__table', 'dish__category')
+    queryset = models.OrderItem.objects.select_related('order', 'dish').prefetch_related('order__table', 'dish__category').order_by('created_at')
     permission_classes = [IsAdminOrWaiter]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['created_at']

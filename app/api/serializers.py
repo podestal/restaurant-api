@@ -90,17 +90,21 @@ class CartSerializer(serializers.ModelSerializer):
 class SimpleOrderItemSerializer(serializers.ModelSerializer):
 
     name = serializers.SerializerMethodField()
+    category_name = serializers.SerializerMethodField()
     # dish_id = serializers.SerializerMethodField()
 
     class Meta:
         model = models.OrderItem
-        fields = ['id', 'quantity', 'cost', 'observations', 'name', 'created_at']
+        fields = ['id', 'quantity', 'cost', 'observations', 'name', 'created_at', 'category_name']
 
     def get_name(self, obj):
         return obj.dish.name if obj.dish else None
     
-    def get_dish_id(self, obj):
-        return obj.dish.id if obj.dish else None
+    # def get_dish_id(self, obj):
+    #     return obj.dish.id if obj.dish else None
+    
+    def get_category_name(self, obj):
+        return f'{obj.dish.category.name}' if obj.dish.category.name else None
 
 class GetOrderSerializer(serializers.ModelSerializer):
 

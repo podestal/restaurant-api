@@ -19,6 +19,7 @@ def create_dish(create_category):
 
 @pytest.mark.django_db
 class TestDishViewSet:
+    """Test class for Dish model."""
 
     def test_dish_list_unauthenticated_return_200(self, api_client):
         response = api_client.get("/api/dishes/")
