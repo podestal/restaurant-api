@@ -1,6 +1,7 @@
 from django.utils import timezone
 from datetime import datetime, time
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework import status
 from rest_framework import permissions
@@ -18,6 +19,9 @@ from . import serializers
 from . import models
 
 import stripe
+import os
+
+stripe.api_key = os.environ.get('STRIPE_SECRET_KEY')
 
 class DishViewSet(ModelViewSet):
 
@@ -135,10 +139,6 @@ class OrderViewSet(ModelViewSet):
         status = request.data.get('status')
         order_type = request.data.get('order_type')
 
-        payment_intent_id = request.data.get('payment_intent_id')
-
-
-
         order = models.Order.objects.create(
             table_id=table, 
             created_by_id=created_by, 
@@ -152,13 +152,6 @@ class OrderViewSet(ModelViewSet):
             **kwargs)
         
         if cart_id:
-
-            try:
-                payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
-                if payment_intent.status != "succeeded":
-                    return Response({"error": "Payment not verified"}, status=status.HTTP_400_BAD_REQUEST)
-            except stripe.error.StripeError as e:
-                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
             cart = models.Cart.objects.prefetch_related('items').get(id=cart_id)
             for item in cart.items.all():
@@ -253,3 +246,32 @@ class OrderItemViewSet(ModelViewSet):
         order_items = self.queryset.filter(created_at__year=year, created_at__month=month)
         serializer = serializers.SimpleOrderItemSerializer(order_items, many=True)
         return Response(serializer.data)
+
+class ProcessPaymentView(APIView):
+    def post(self, request, *args, **kwargs):
+
+        try:
+            amount = request.data.get("amount")
+            payment_method_id = request.data.get("payment_method_id")
+
+            if not amount or not payment_method_id:
+                return Response({"error": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST)
+
+            payment_intent = stripe.PaymentIntent.create(
+                amount=int(amount * 100),
+                currency="usd",
+                payment_method=payment_method_id,
+                confirm=True, 
+                metadata={"order_id": "12345"}, 
+            )
+
+            return Response({
+                "message": "Payment successful",
+                "payment_intent": payment_intent,
+            })
+
+        except stripe.error.CardError as e:
+            return Response({"error": e.error.message}, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
