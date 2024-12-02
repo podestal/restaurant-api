@@ -249,7 +249,6 @@ class OrderItemViewSet(ModelViewSet):
 
 class ProcessPaymentView(APIView):
     def post(self, request, *args, **kwargs):
-
         try:
             amount = request.data.get("amount")
             payment_method_id = request.data.get("payment_method_id")
@@ -258,16 +257,16 @@ class ProcessPaymentView(APIView):
                 return Response({"error": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST)
 
             payment_intent = stripe.PaymentIntent.create(
-                amount=int(amount * 100),
+                amount=int(float(amount) * 100),  # Ensure correct format for Stripe
                 currency="usd",
                 payment_method=payment_method_id,
-                confirm=True, 
-                metadata={"order_id": "12345"}, 
+                confirm=False,  # Do not confirm here; let frontend handle it
+                metadata={"order_id": "12345"},
             )
 
             return Response({
-                "message": "Payment successful",
-                "payment_intent": payment_intent,
+                "message": "PaymentIntent created successfully",
+                "client_secret": payment_intent['client_secret'],  # Send client_secret to frontend
             })
 
         except stripe.error.CardError as e:
