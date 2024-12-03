@@ -176,6 +176,8 @@ class OrderViewSet(ModelViewSet):
 
             cart.items.all().delete()
 
+            return Response(serializers.GetOrderSerializer(order).data)
+
         return Response(serializers.CreateOrderSerializer(order).data)
 
     def update(self, request, *args, **kwargs):
