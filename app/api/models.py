@@ -139,9 +139,9 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
 
-    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True, blank=True, related_name='order_items')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True, related_name='order_items')
     bill = models.ForeignKey(Bill, on_delete=models.SET_NULL, null=True, blank=True, related_name='order_items')
-    dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
+    dish = models.ForeignKey(Dish, on_delete=models.SET_NULL, null=True, blank=True)
     cost = models.DecimalField(max_digits=10, decimal_places=2)
     observations = models.TextField(null=True, blank=True)
     quantity = models.PositiveIntegerField()
