@@ -82,9 +82,9 @@ RUN adduser \
     --disabled-password \
     --home /home/django-user \
     django-user && \
-    mkdir -p /vol/web/media /vol/web/static /app/staticfiles && \
-    chown -R django-user:django-user /vol /home/django-user /app/staticfiles && \
-    chmod -R 755 /vol /app/staticfiles && \
+    mkdir -p /app/staticfiles && \
+    chown -R django-user:django-user /app/staticfiles && \
+    chmod -R 755 /app/staticfiles \
     chmod -R +x /scripts
 
 # Switch to non-root user
