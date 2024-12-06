@@ -77,23 +77,15 @@ RUN python -m venv /py && \
     apt-get purge -y --auto-remove build-essential && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    adduser \
-    --disabled-password \
-    --home /home/django-user \
-    django-user && \
     mkdir -p /vol/web/media && \
     mkdir -p /vol/web/static && \
     mkdir -p /app/staticfiles && \
-    chown -R django-user:django-user /vol /home/django-user /app/staticfiles && \
-    chmod -R 755 /vol && \
+    chmod -R 755 /vol /app/staticfiles && \
     chmod -R +x /scripts && \
     rm -rf /tmp
 
 # Add the scripts directory to the PATH
 ENV PATH="/scripts:/py/bin:$PATH"
-
-# Set the user to a non-root user
-USER django-user
 
 # Command to run the application
 CMD ["run.sh"]
