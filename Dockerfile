@@ -42,53 +42,58 @@
 
 FROM python:3.11-bookworm
 
-# Set environment variables
+# Set environment variable to avoid Python buffering
 ENV PYTHONUNBUFFERED=1
-ENV PATH="/scripts:/py/bin:$PATH"
 
-# Create necessary directories
+# Ensure /tmp directory exists and is writable
 RUN mkdir -p /tmp && chmod 1777 /tmp
 
-# Copy application files
+# Copy application requirements and scripts
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./scripts /scripts
 COPY ./app /app
 
-# Set working directory
+# Set the working directory
 WORKDIR /app
+
+# Expose the Django default port
 EXPOSE 8000
 
-# ARG for development mode
+# Argument for development environment
 ARG DEV=false
 
-# Install dependencies
+# Install dependencies and setup virtual environment
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
     postgresql-client \
     libjpeg-dev \
-    zlib1g-dev \
     build-essential \
-    libpq-dev && \
+    libpq-dev \
+    zlib1g-dev && \
     /py/bin/pip install -r /tmp/requirements.txt && \
-    if [ "$DEV" = "true" ]; then /py/bin/pip install -r /tmp/requirements.dev.txt ; fi && \
+    if [ "$DEV" = "true" ]; then /py/bin/pip install -r /tmp/requirements.dev.txt; fi && \
     apt-get purge -y --auto-remove build-essential && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Create non-root user and directories
-RUN adduser \
+    rm -rf /var/lib/apt/lists/* && \
+    adduser \
     --disabled-password \
     --home /home/django-user \
     django-user && \
+    mkdir -p /vol/web/media && \
+    mkdir -p /vol/web/static && \
     mkdir -p /app/staticfiles && \
-    chown -R django-user:django-user /app/staticfiles && \
-    chmod -R 755 /app/staticfiles \
-    chmod -R +x /scripts
+    chown -R django-user:django-user /vol /home/django-user /app/staticfiles && \
+    chmod -R 755 /vol && \
+    chmod -R +x /scripts && \
+    rm -rf /tmp
 
-# Switch to non-root user
+# Add the scripts directory to the PATH
+ENV PATH="/scripts:/py/bin:$PATH"
+
+# Set the user to a non-root user
 USER django-user
 
-# Run the application
+# Command to run the application
 CMD ["run.sh"]
