@@ -167,3 +167,45 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"Payment for Order {self.order.id} - {self.get_status_display()}"
+
+class Promotion(models.Model):
+    PERCENTAGE = 'P'
+    FIXED_AMOUNT = 'F'
+
+    DISCOUNT_TYPES = [
+        (PERCENTAGE, 'Percentage'),
+        (FIXED_AMOUNT, 'Fixed Amount'),
+    ]
+
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    discount_type = models.CharField(max_length=1, choices=DISCOUNT_TYPES, default=PERCENTAGE)
+    discount_value = models.DecimalField(max_digits=10, decimal_places=2)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    is_active = models.BooleanField(default=True)
+    applicable_dishes = models.ManyToManyField('Dish', blank=True, related_name='promotions')
+    applicable_categories = models.ManyToManyField('Category', blank=True, related_name='promotions')
+
+    def __str__(self):
+        return f"{self.name} - {self.discount_type} {self.discount_value}"
+
+    def is_valid(self):
+        """Check if the promotion is active and within its valid timeframe."""
+        now = timezone.now()
+        return self.is_active and self.start_date <= now <= self.end_date
+
+
+class DiscountCode(models.Model):
+    code = models.CharField(max_length=50, unique=True)
+    promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE, related_name='discount_codes')
+    max_uses = models.PositiveIntegerField(default=1)
+    uses = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.code
+
+    def can_be_used(self):
+        return self.is_active and self.uses < self.max_uses
