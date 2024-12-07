@@ -186,3 +186,16 @@ class PaymentSerializer(serializers.ModelSerializer):
         model = models.Payment
         fields = ['id', 'order', 'amount', 'stripe_payment_intent_id', 'status', 'created_at', 'updated_at']
         read_only_fields = ['id', 'stripe_payment_intent_id', 'status', 'created_at', 'updated_at']
+
+class PromotionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Promotion
+        fields = '__all__'
+
+class DiscountCodeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.DiscountCode
+        fields = '__all__'
+    

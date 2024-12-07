@@ -19,6 +19,9 @@ router.register('order-items', views.OrderItemViewSet)
 table_router = routers.NestedDefaultRouter(router, 'tables', lookup='tables')
 table_router.register('bill', views.BillViewSet, basename='bill')
 
+router.register('promotions', views.PromotionViewSet, basename='promotions')
+router.register('discounts', views.DiscountCodeViewSet, basename='discounts')
+
 urlpatterns = [
     path('process-payment/', views.ProcessPaymentView.as_view(), name='process-payment'),
 ]

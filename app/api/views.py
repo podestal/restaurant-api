@@ -276,3 +276,13 @@ class ProcessPaymentView(APIView):
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class PromotionViewSet(ModelViewSet):
+
+    queryset = models.Promotion.objects.all()
+    serializer_class = serializers.PromotionSerializer
+
+class DiscountCodeViewSet(ModelViewSet):
+
+    queryset = models.DiscountCode.objects.all()
+    serializer_class = serializers.DiscountCodeSerializer
