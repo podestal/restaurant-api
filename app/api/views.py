@@ -285,6 +285,11 @@ class PromotionViewSet(ModelViewSet):
         if self.request.method == 'POST':
             return serializers.CreatePromotionSerializer
         return serializers.GetPromotionSerializer
+    
+    def get_permissions(self):
+        if self.request.method in ['POST', 'PATCH', 'PUT', 'DELETE']:
+            return [permissions.IsAdminUser()]
+        return [permissions.AllowAny()]
 
 class PromotionItemViewSet(ModelViewSet):
 
@@ -298,6 +303,11 @@ class PromotionItemViewSet(ModelViewSet):
     def get_queryset(self):
         promotion_id = self.kwargs.get('promotions_pk')
         return self.queryset.filter(promotion_id=promotion_id)
+    
+    def get_permissions(self):
+        if self.request.method in ['POST', 'PATCH', 'PUT', 'DELETE']:
+            return [permissions.IsAdminUser()]
+        return [permissions.AllowAny()]
 
 class DiscountCodeViewSet(ModelViewSet):
 
