@@ -20,6 +20,10 @@ table_router = routers.NestedDefaultRouter(router, 'tables', lookup='tables')
 table_router.register('bill', views.BillViewSet, basename='bill')
 
 router.register('promotions', views.PromotionViewSet, basename='promotions')
+
+promotion_router = routers.NestedDefaultRouter(router, 'promotions', lookup='promotions')
+promotion_router.register('promotion-items', views.PromotionItemViewSet, basename='promotion-items')
+
 router.register('discounts', views.DiscountCodeViewSet, basename='discounts')
 
 urlpatterns = [
@@ -27,4 +31,4 @@ urlpatterns = [
 ]
 
 
-urlpatterns += router.urls + cart_router.urls + table_router.urls
+urlpatterns += router.urls + cart_router.urls + table_router.urls + promotion_router.urls

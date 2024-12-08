@@ -169,31 +169,19 @@ class Payment(models.Model):
         return f"Payment for Order {self.order.id} - {self.get_status_display()}"
 
 class Promotion(models.Model):
-    PERCENTAGE = 'P'
-    FIXED_AMOUNT = 'F'
-
-    DISCOUNT_TYPES = [
-        (PERCENTAGE, 'Percentage'),
-        (FIXED_AMOUNT, 'Fixed Amount'),
-    ]
 
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    discount_type = models.CharField(max_length=1, choices=DISCOUNT_TYPES, default=PERCENTAGE)
-    discount_value = models.DecimalField(max_digits=10, decimal_places=2)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     is_active = models.BooleanField(default=True)
-    applicable_dishes = models.ManyToManyField('Dish', blank=True, related_name='promotions')
-    applicable_categories = models.ManyToManyField('Category', blank=True, related_name='promotions')
 
     def __str__(self):
         return f"{self.name} - {self.discount_type} {self.discount_value}"
+    
+class PromotionItem(models.Model):
 
-    def is_valid(self):
-        """Check if the promotion is active and within its valid timeframe."""
-        now = timezone.now()
-        return self.is_active and self.start_date <= now <= self.end_date
+    dish = models.ForeignKey(Dish, on_delete=models.SET_NULL, null=True)
+    quantity = models.IntegerField()
 
 
 class DiscountCode(models.Model):

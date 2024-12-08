@@ -193,6 +193,12 @@ class PromotionSerializer(serializers.ModelSerializer):
         model = models.Promotion
         fields = '__all__'
 
+class PromotionItemSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.PromotionItem
+        fields = '__all__'
+
 class DiscountCodeSerializer(serializers.ModelSerializer):
 
     class Meta:

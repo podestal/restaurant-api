@@ -282,6 +282,11 @@ class PromotionViewSet(ModelViewSet):
     queryset = models.Promotion.objects.all()
     serializer_class = serializers.PromotionSerializer
 
+class PromotionItemViewSet(ModelViewSet):
+
+    queryset = models.PromotionItem.objects.all()
+    serializer_class = serializers.PromotionItemSerializer
+
 class DiscountCodeViewSet(ModelViewSet):
 
     queryset = models.DiscountCode.objects.all()
