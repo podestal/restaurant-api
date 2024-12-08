@@ -160,8 +160,6 @@ class GetTableSerializer(serializers.ModelSerializer):
         model = models.Table
         fields = ['id', 'number', 'status', 'guest_name', 'seats']
 
-    
-
 class CreateTableSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -187,17 +185,31 @@ class PaymentSerializer(serializers.ModelSerializer):
         fields = ['id', 'order', 'amount', 'stripe_payment_intent_id', 'status', 'created_at', 'updated_at']
         read_only_fields = ['id', 'stripe_payment_intent_id', 'status', 'created_at', 'updated_at']
 
+class GetPromotionItemSerializer(serializers.ModelSerializer):
+
+    name = serializers.SerializerMethodField()
+
+    class Meta: 
+        model = models.PromotionItem
+        fields = ['id', 'quantity', 'name']
+
+    def get_name(self, obj):
+        return obj.dish.name if obj.dish else None
+
 class PromotionSerializer(serializers.ModelSerializer):
+
+    # items = GetPromotionItemSerializer(many=True)
 
     class Meta:
         model = models.Promotion
         fields = '__all__'
 
-class PromotionItemSerializer(serializers.ModelSerializer):
+
+class CreatePromotionItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.PromotionItem
-        fields = '__all__'
+        fields = ['id', 'promotion', 'dish', 'quantity']
 
 class DiscountCodeSerializer(serializers.ModelSerializer):
 

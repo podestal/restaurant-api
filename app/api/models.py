@@ -176,10 +176,11 @@ class Promotion(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.name} - {self.discount_type} {self.discount_value}"
+        return f"{self.name} - {self.amount}"
     
 class PromotionItem(models.Model):
 
+    promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE, related_name='items')
     dish = models.ForeignKey(Dish, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField()
 

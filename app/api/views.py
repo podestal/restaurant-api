@@ -284,8 +284,16 @@ class PromotionViewSet(ModelViewSet):
 
 class PromotionItemViewSet(ModelViewSet):
 
-    queryset = models.PromotionItem.objects.all()
-    serializer_class = serializers.PromotionItemSerializer
+    queryset = models.PromotionItem.objects.select_related('promotion', 'dish')
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return serializers.CreatePromotionItemSerializer
+        return serializers.GetPromotionItemSerializer
+    
+    def get_queryset(self):
+        promotion_id = self.kwargs.get('promotions_pk')
+        return self.queryset.filter(promotion_id=promotion_id)
 
 class DiscountCodeViewSet(ModelViewSet):
 
