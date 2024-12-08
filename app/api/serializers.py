@@ -195,14 +195,20 @@ class GetPromotionItemSerializer(serializers.ModelSerializer):
 
     def get_name(self, obj):
         return obj.dish.name if obj.dish else None
+    
+class GetPromotionSerializer(serializers.ModelSerializer):
 
-class PromotionSerializer(serializers.ModelSerializer):
-
-    # items = GetPromotionItemSerializer(many=True)
+    items = GetPromotionItemSerializer(many=True)
 
     class Meta:
         model = models.Promotion
-        fields = '__all__'
+        fields = ['id', 'name', 'description', 'amount', 'is_active', 'items']
+
+class CreatePromotionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Promotion
+        fields = ['id', 'name', 'description', 'amount', 'is_active']
 
 
 class CreatePromotionItemSerializer(serializers.ModelSerializer):

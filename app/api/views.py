@@ -280,7 +280,11 @@ class ProcessPaymentView(APIView):
 class PromotionViewSet(ModelViewSet):
 
     queryset = models.Promotion.objects.all()
-    serializer_class = serializers.PromotionSerializer
+    
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return serializers.CreatePromotionSerializer
+        return serializers.GetPromotionSerializer
 
 class PromotionItemViewSet(ModelViewSet):
 
