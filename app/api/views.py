@@ -279,7 +279,7 @@ class ProcessPaymentView(APIView):
 
 class PromotionViewSet(ModelViewSet):
 
-    queryset = models.Promotion.objects.all()
+    queryset = models.Promotion.objects.all().order_by('id')
     
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -293,7 +293,7 @@ class PromotionViewSet(ModelViewSet):
 
 class PromotionItemViewSet(ModelViewSet):
 
-    queryset = models.PromotionItem.objects.select_related('promotion', 'dish')
+    queryset = models.PromotionItem.objects.select_related('promotion', 'dish').order_by('id')
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
