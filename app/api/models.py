@@ -30,6 +30,11 @@ class Dish(models.Model):
     picture = models.ImageField(upload_to="dishes/", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    discount= models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+
+    @property
+    def final_price(self):
+        return self.cost - (self.discount or 0)
 
     def __str__(self):
         return self.name

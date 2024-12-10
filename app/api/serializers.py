@@ -7,7 +7,7 @@ class GetDishSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Dish
-        fields = ['id', 'name', 'description', 'cost', 'created_at', 'available', 'picture_url', 'category']
+        fields = ['id', 'name', 'description', 'cost', 'created_at', 'available', 'picture_url', 'category', 'discount', 'final_price']
 
     def get_picture_url(self, obj):
         request = self.context.get('request')
