@@ -20,19 +20,13 @@ class CreateDishSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Dish
-        fields = ['id', 'name', 'description', 'cost', 'available', 'picture', 'category']
+        fields = ['id', 'name', 'description', 'cost', 'available', 'picture', 'category', 'discount']
 
 class UpdateDishSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Dish
-        fields = ['id', 'name', 'description', 'cost', 'available', 'picture', 'category']
-
-# class CreateDishImageSerializer(serializers.ModelSerializer):
-
-#     class Meta: 
-#         model = models.DishImage
-#         fields = ['id', 'image', 'dish']
+        fields = ['id', 'name', 'description', 'cost', 'available', 'picture', 'category', 'discount']
 
 class GetCategorySerializer(serializers.ModelSerializer):
 
