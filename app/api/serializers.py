@@ -85,17 +85,21 @@ class SimpleOrderItemSerializer(serializers.ModelSerializer):
 
     name = serializers.SerializerMethodField()
     category_name = serializers.SerializerMethodField()
+    promotion_name = serializers.SerializerMethodField()
     # dish_id = serializers.SerializerMethodField()
 
     class Meta:
         model = models.OrderItem
-        fields = ['id', 'quantity', 'cost', 'observations', 'name', 'created_at', 'category_name']
+        fields = ['id', 'quantity', 'cost', 'observations', 'name', 'created_at', 'category_name', 'promotion_name']
 
     def get_name(self, obj):
         return obj.dish.name if obj.dish else None
     
     # def get_dish_id(self, obj):
     #     return obj.dish.id if obj.dish else None
+
+    # def get_promotion_name(self, obj):
+
     
     def get_category_name(self, obj):
         return f'{obj.dish.category.name}' if obj.dish.category.name else None
@@ -171,7 +175,7 @@ class CreateOrderItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.OrderItem
-        fields = ['id', 'dish', 'order', 'quantity', 'observations', 'cost', 'bill']
+        fields = ['id', 'dish', 'order', 'quantity', 'observations', 'cost', 'bill', 'promotion']
 
 class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
