@@ -86,7 +86,6 @@ class SimpleOrderItemSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     category_name = serializers.SerializerMethodField()
     promotion_name = serializers.SerializerMethodField()
-    # dish_id = serializers.SerializerMethodField()
 
     class Meta:
         model = models.OrderItem
@@ -94,11 +93,9 @@ class SimpleOrderItemSerializer(serializers.ModelSerializer):
 
     def get_name(self, obj):
         return obj.dish.name if obj.dish else None
-    
-    # def get_dish_id(self, obj):
-    #     return obj.dish.id if obj.dish else None
 
-    # def get_promotion_name(self, obj):
+    def get_promotion_name(self, obj):
+        return obj.promotion.name if obj.promotion else None
 
     
     def get_category_name(self, obj):
