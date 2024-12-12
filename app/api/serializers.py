@@ -118,7 +118,9 @@ class SimpleOrderItemSerializer(serializers.ModelSerializer):
 
     
     def get_category_name(self, obj):
-        return f'{obj.dish.category.name}' if obj.dish.category.name else None
+        if obj.dish:
+            return f'{obj.dish.category.name}' if obj.dish.category.name else None
+        return None
 
 class GetOrderSerializer(serializers.ModelSerializer):
 

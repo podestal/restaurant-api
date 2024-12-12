@@ -216,7 +216,7 @@ class OrderViewSet(ModelViewSet):
 
 class OrderItemViewSet(ModelViewSet):
 
-    queryset = models.OrderItem.objects.select_related('order', 'dish', 'promotion').prefetch_related('order__table', 'dish__category', 'promotion__dish').order_by('created_at')
+    queryset = models.OrderItem.objects.select_related('order', 'dish', 'promotion').prefetch_related('order__table', 'dish__category').order_by('created_at')
     permission_classes = [IsAdminOrWaiter]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['created_at']
