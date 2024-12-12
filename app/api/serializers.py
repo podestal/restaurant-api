@@ -100,18 +100,28 @@ class GetPromotionSerializer(serializers.ModelSerializer):
         model = models.Promotion
         fields = ['id', 'name', 'description', 'amount', 'is_active', 'items']
 
+class GetSimplePromotionSerializer(serializers.ModelSerializer):
+
+    items = GetPromotionItemSerializer(many=True)
+
+    class Meta:
+        model = models.Promotion
+        fields = ['id', 'name', 'items']
+
 class SimpleOrderItemSerializer(serializers.ModelSerializer):
 
     name = serializers.SerializerMethodField()
     category_name = serializers.SerializerMethodField()
-    promotion = GetPromotionSerializer()
+    promotion = GetSimplePromotionSerializer()
 
     class Meta:
         model = models.OrderItem
         fields = ['id', 'quantity', 'cost', 'observations', 'name', 'created_at', 'category_name', 'promotion']
 
     def get_name(self, obj):
-        return obj.dish.name if obj.dish else None
+        if obj.dish:
+            return obj.dish.name if obj.dish else None
+        return obj.promotion.name if obj.promotion else None
 
     def get_promotion_name(self, obj):
         return obj.promotion.name if obj.promotion else None
