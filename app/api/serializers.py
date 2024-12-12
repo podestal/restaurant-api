@@ -81,15 +81,34 @@ class CartSerializer(serializers.ModelSerializer):
         model = models.Cart
         fields = ['id', 'session_id', 'created_at', 'updated_at', 'user', 'items']
 
+class GetPromotionItemSerializer(serializers.ModelSerializer):
+
+    name = serializers.SerializerMethodField()
+
+    class Meta: 
+        model = models.PromotionItem
+        fields = ['id', 'quantity', 'name']
+
+    def get_name(self, obj):
+        return obj.dish.name if obj.dish else None
+
+class GetPromotionSerializer(serializers.ModelSerializer):
+
+    items = GetPromotionItemSerializer(many=True)
+
+    class Meta:
+        model = models.Promotion
+        fields = ['id', 'name', 'description', 'amount', 'is_active', 'items']
+
 class SimpleOrderItemSerializer(serializers.ModelSerializer):
 
     name = serializers.SerializerMethodField()
     category_name = serializers.SerializerMethodField()
-    promotion_name = serializers.SerializerMethodField()
+    promotion = GetPromotionSerializer()
 
     class Meta:
         model = models.OrderItem
-        fields = ['id', 'quantity', 'cost', 'observations', 'name', 'created_at', 'category_name', 'promotion_name']
+        fields = ['id', 'quantity', 'cost', 'observations', 'name', 'created_at', 'category_name', 'promotion']
 
     def get_name(self, obj):
         return obj.dish.name if obj.dish else None
@@ -179,25 +198,6 @@ class PaymentSerializer(serializers.ModelSerializer):
         model = models.Payment
         fields = ['id', 'order', 'amount', 'stripe_payment_intent_id', 'status', 'created_at', 'updated_at']
         read_only_fields = ['id', 'stripe_payment_intent_id', 'status', 'created_at', 'updated_at']
-
-class GetPromotionItemSerializer(serializers.ModelSerializer):
-
-    name = serializers.SerializerMethodField()
-
-    class Meta: 
-        model = models.PromotionItem
-        fields = ['id', 'quantity', 'name']
-
-    def get_name(self, obj):
-        return obj.dish.name if obj.dish else None
-    
-class GetPromotionSerializer(serializers.ModelSerializer):
-
-    items = GetPromotionItemSerializer(many=True)
-
-    class Meta:
-        model = models.Promotion
-        fields = ['id', 'name', 'description', 'amount', 'is_active', 'items']
 
 class CreatePromotionSerializer(serializers.ModelSerializer):
 
