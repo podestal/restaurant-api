@@ -107,7 +107,18 @@ class Table(models.Model):
     
 class Bill(models.Model):
 
+    BILL_VOID = 'V'
+    BILL_TICKET = 'T'
+    BILL_INVOICE = 'I'
+
+    BILL_DOCUMENT_OPTIONS = [
+        (BILL_VOID, 'Void'),
+        (BILL_TICKET, 'Ticket'),
+        (BILL_INVOICE, 'Invoice')
+    ]
+
     table = models.OneToOneField(Table, on_delete=models.CASCADE, related_name='bill')
+    document = models.CharField(max_length=1, choices=BILL_DOCUMENT_OPTIONS, default=BILL_VOID)
 
 
     def save(self, *args, **kwargs):

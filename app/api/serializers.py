@@ -150,7 +150,7 @@ class GetBillSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Bill
-        fields = ['id', 'order_items', 'table']
+        fields = ['id', 'order_items', 'table', 'document']
 
 class CreateBillSerializer(serializers.ModelSerializer):
 
