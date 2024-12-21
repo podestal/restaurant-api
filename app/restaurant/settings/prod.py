@@ -31,3 +31,7 @@ CSRF_TRUSTED_ORIGINS = []
 CSRF_TRUSTED_ORIGINS.extend(
     filter(None, os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(","))
 )
+
+MEDIA_URL = 'https://restaurant.podestalservers.com/media/'
+
+USE_X_FORWARDED_HOST = True
