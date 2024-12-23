@@ -46,6 +46,7 @@ services:
       - 443:443
     volumes:
       - ./nginx:/etc/nginx/conf.d
+      - ./mediafiles:/vol/media
       - /etc/letsencrypt:/etc/letsencrypt
     image: nginx:latest
     links:
