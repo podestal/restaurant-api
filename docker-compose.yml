@@ -117,7 +117,7 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - ./mediafiles:/vol/media
-      - letsencrypt:/etc/letsencrypt
+      - /etc/letsencrypt:/etc/letsencrypt
     image: nginx:latest
     links:
       - app
