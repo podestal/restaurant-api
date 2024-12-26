@@ -31,6 +31,7 @@ class UpdateDishSerializer(serializers.ModelSerializer):
 class GetCategorySerializer(serializers.ModelSerializer):
 
     available = serializers.SerializerMethodField()
+    
     class Meta:
         model = models.Category
         fields = ['id', 'name', 'description', 'time_period', 'available']
