@@ -3,7 +3,6 @@ from .base import *
 DEBUG = True
 ALLOWED_HOSTS.extend(filter(None, os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")))
 
-# Use PostgreSQL for production
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
