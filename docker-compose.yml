@@ -97,6 +97,10 @@ services:
       - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL}
       - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_STORAGE_BUCKET_NAME=${AWS_STORAGE_BUCKET_NAME}
+      - AWS_S3_REGION_NAME=${AWS_S3_REGION_NAME}
     depends_on:
       - db
 
@@ -130,12 +134,6 @@ services:
               cp /etc/nginx/conf.d/nginx-dev.conf /etc/nginx/nginx.conf;
              fi &&
              nginx -g "daemon off;"'
-
-#   # redis:
-#   #   image: redis:6-alpine
-#   #   restart: always
-#   #   ports:
-#   #     - 6379:6379
 
 volumes:
   dev-db-data:

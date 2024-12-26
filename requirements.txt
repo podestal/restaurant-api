@@ -3,6 +3,8 @@ async-timeout==5.0.1
 attrs==24.2.0
 autobahn==23.1.2
 Automat==24.8.1
+boto3==1.35.87
+botocore==1.35.87
 certifi==2024.8.30
 cffi==1.17.1
 channels==4.2.0
@@ -16,6 +18,7 @@ Django==4.2.16
 django-cors-headers==4.4.0
 django-debug-toolbar==4.4.6
 django-filter==24.3
+django-storages==1.14.4
 django-templated-mail==1.1.1
 djangorestframework==3.15.2
 djangorestframework-simplejwt==5.3.1
@@ -27,6 +30,7 @@ hyperlink==21.0.0
 idna==3.10
 incremental==24.7.2
 iniconfig==2.0.0
+jmespath==1.0.1
 model-bakery==1.20.0
 msgpack==1.1.0
 oauthlib==3.2.2
@@ -41,11 +45,14 @@ PyJWT==2.9.0
 pyOpenSSL==24.2.1
 pytest==8.3.3
 pytest-django==4.9.0
+python-dateutil==2.9.0.post0
 python3-openid==3.2.0
 redis==5.2.0
 requests==2.32.3
 requests-oauthlib==2.0.0
+s3transfer==0.10.4
 service-identity==24.2.0
+six==1.17.0
 social-auth-app-django==5.4.2
 social-auth-core==4.5.4
 sqlparse==0.5.1
@@ -54,6 +61,6 @@ tomli==2.0.2
 twisted==24.10.0
 txaio==23.1.1
 typing-extensions==4.12.2
-urllib3==2.2.3
+urllib3==1.26.20
 whitenoise==6.7.0
 zope.interface==7.1.1
