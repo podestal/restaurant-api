@@ -50,29 +50,35 @@ class CartItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.CartItem
-        fields = ['id', 'quantity', 'dish', 'price', 'cart', 'observations']
+        fields = ['id', 'quantity', 'dish', 'promotion', 'price', 'cart', 'observations']
 
 class SimpleCartItemSerializer(serializers.ModelSerializer):
 
     name = serializers.SerializerMethodField()
     picture = serializers.SerializerMethodField()
     dish_id = serializers.SerializerMethodField()
+    promotion_id = serializers.SerializerMethodField()
 
     class Meta:
         model = models.CartItem
-        fields = ['id', 'quantity', 'name', 'price', 'dish_id', 'picture', 'observations']
+        fields = ['id', 'quantity', 'name', 'price', 'dish_id', 'promotion_id', 'picture', 'observations']
 
     def get_name(self, obj):
-        return obj.dish.name if obj.dish else None
+        if obj.dish:
+            return obj.dish.name
+        return obj.promotion.name if obj.promotion else None
 
     def get_picture(self, obj):
         request = self.context.get('request')
-        if obj.dish.picture:
+        if obj.dish and obj.dish.picture:
             return request.build_absolute_uri(obj.dish.picture.url)
         return None
     
     def get_dish_id(self, obj):
         return obj.dish.id if obj.dish else None
+    
+    def get_promotion_id(self, obj):
+        return obj.promotion.id if obj.promotion else None
 
 class CartSerializer(serializers.ModelSerializer):
 
