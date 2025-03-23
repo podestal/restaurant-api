@@ -70,21 +70,19 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt
       - /var/www/certbot:/var/www/certbot
     entrypoint: >
-      sh -c "if [ \"$ENVIRONMENT\" = \"production\" ]; then
-                certbot certonly --webroot --webroot-path=/var/www/certbot
-                --email admin@example.com
-                --agree-tos
-                --no-eff-email
-                -d quenteh.podestalservers.com &&
-                crond -f;
-             else
-                echo 'Skipping Certbot in development';
-             fi"
+      sh -c '
+        if [ "$$ENVIRONMENT" = "production" ]; then
+          certbot certonly --webroot --webroot-path=/var/www/certbot \
+          --email admin@example.com --agree-tos --no-eff-email \
+          -d quenteh.podestalservers.com &&
+          crond -f;
+        else
+          echo "Skipping Certbot in development";
+        fi'
     environment:
       - ENVIRONMENT=${ENVIRONMENT}
     depends_on:
       - nginx
-
 
 volumes:
   dev-db-data:
